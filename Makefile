@@ -1,5 +1,5 @@
 PROD_REG?=yinyue123/ddos-firewal
-IMG_TAG?=v0.6
+IMG_TAG?=v0.9
 PROD_IMG?=${PROD_REG}:${IMG_TAG}
 
 all: push
