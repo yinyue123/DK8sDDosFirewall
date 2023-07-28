@@ -21,6 +21,10 @@ COPY --from=builder /app/stats.ljbc   /app/
 COPY --from=builder /app/protect.ljbc /app/
 COPY --from=builder /app/ping.ljbc    /app/
 COPY --from=builder /app/record.ljbc  /app/
+ADD stats.lua       /app/stats.lua
+ADD protect.lua     /app/protect.lua
+ADD ping.lua        /app/ping.lua
+ADD record.lua      /app/record.lua
 ADD cert.key        /app/cert.key
 ADD cert.pem        /app/cert.pem
 ADD env.conf        /app/env.conf
