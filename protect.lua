@@ -45,12 +45,12 @@ function protect(during, ttl, count_limit, bytes_limit)
     end
 
     local count = dict:get(count_key)
-    if count ~= nil and count > count_limit then
+    if count ~= nil and count > tonumber(count_limit) then
         ngx.exit(444)
     end
 
     local bytes = dict:get(bytes_key)
-    if bytes ~= nil and bytes > bytes_limit then
+    if bytes ~= nil and bytes > tonumber(bytes_limit) then
         ngx.exit(444)
     end
 
