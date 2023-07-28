@@ -23,6 +23,7 @@ COPY --from=builder /app/ping.ljbc    /app/
 COPY --from=builder /app/record.ljbc  /app/
 ADD cert.key        /app/cert.key
 ADD cert.pem        /app/cert.pem
+ADD env.conf        /app/env.conf
 ADD nginx.conf      /app/nginx.conf
 
 CMD ["openresty", "-c", "/app/nginx.conf"]
