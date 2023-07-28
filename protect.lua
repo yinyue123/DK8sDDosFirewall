@@ -42,14 +42,17 @@ function protect(during, ttl, count_limit, bytes_limit)
         set_key(dict, last_time_key, timestamp)
         set_key(dict, count_key, 0)
         set_key(dict, bytes_key, 0)
+        ngx.log(ngx.ERROR, "add ip", last_time_key, count_key, bytes_key)
     end
 
     local count = dict:get(count_key)
+    ngx.log(ngx.ERROR, "get count", count_key, count)
     if count ~= nil and count > tonumber(count_limit) then
         ngx.exit(444)
     end
 
     local bytes = dict:get(bytes_key)
+    ngx.log(ngx.ERROR, "get bytes", bytes_key, bytes)
     if bytes ~= nil and bytes > tonumber(bytes_limit) then
         ngx.exit(444)
     end
