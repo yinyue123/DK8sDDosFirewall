@@ -3,7 +3,8 @@ function protect(during)
     local timestamp = ngx.now()
     local dict = ngx.shared.traffic_stats
     for key, value in dict:pairs() do
-        ngx.log(ngx.INFO, key, value)
+        ngx.log(ngx.ERR, key, value)
+        ngx.say(key, ",", value)
         local match = "last:"..during
         if string.sub(key, 1, #match) == match then
             local ip = string.sub(str, #match + 1, -1)
@@ -15,5 +16,6 @@ function protect(during)
     end
 end
 
+ngx.say("stats")
 protect("hour")
 protect("day")

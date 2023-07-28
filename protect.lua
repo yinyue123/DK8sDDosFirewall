@@ -14,7 +14,7 @@ function garbage_clean(dict, during, ttl, timestamp)
                 dict:delete(key)
                 dict:delete("count:"..during..":"..ip)
                 dict:delete("bytes:"..during..":"..ip)
-                ngx.log(ngx.INFO, "Garbage clean", key)
+                ngx.log(ngx.ERR, "Garbage clean", key)
             end
         end
     end
@@ -46,13 +46,13 @@ function protect(during, ttl, count_limit, bytes_limit)
     end
 
     local count = dict:get(count_key)
-    ngx.log(ngx.INFO, "get count", count_key, count)
+    ngx.log(ngx.ERR, "get count", count_key, count)
     if count ~= nil and count > tonumber(count_limit) then
         ngx.exit(444)
     end
 
     local bytes = dict:get(bytes_key)
-    ngx.log(ngx.INFO, "get bytes", bytes_key, bytes)
+    ngx.log(ngx.ERR, "get bytes", bytes_key, bytes)
     if bytes ~= nil and bytes > tonumber(bytes_limit) then
         ngx.exit(444)
     end
