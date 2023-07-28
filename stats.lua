@@ -1,6 +1,7 @@
 
 function protect(during)
     local timestamp = ngx.now()
+    local dict = ngx.shared.traffic_stats
     for key, value in dict:pairs() do
         local match = "last:"..during
         if string.sub(key, 1, #match) == match then
