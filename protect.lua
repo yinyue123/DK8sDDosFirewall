@@ -39,16 +39,9 @@ function protect(during, ttl, count_limit, bytes_limit)
     garbage_clean(dict, during, ttl, timestamp)
     local last_time = dict:get(last_time_key)
     if last_time == nil or last_time + ttl < timestamp then
-        local lock_key = "lock"
-        local acquired, err = dict.add(lock_key, true) -- nice to have
-        if acquired then
-            set_key(dict, last_time_key, timestamp)
-            set_key(dict, count_key, 0)
-            set_key(dict, bytes_key, 0)
-            dict:delete(lock_key)
-        else
-            ngx.log(ngx.INFO, "Failed to acquired lock:", err, ". try again later!")
-        end
+        set_key(dict, last_time_key, timestamp)
+        set_key(dict, count_key, 0)
+        set_key(dict, bytes_key, 0)
     end
 
     local count = dict:get(count_key)
