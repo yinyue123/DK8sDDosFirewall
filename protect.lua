@@ -63,5 +63,5 @@ function protect(during, ttl, count_limit, bytes_limit)
 
 end
 
-protect("hour", 3600, ngx.var.limit_count_per_hour, ngx.var.bytes_limit_per_hour)
-protect("day", 3600 * 24, ngx.var.limit_count_per_day, ngx.var.bytes_limit_per_day)
+protect("hour", 3600, ngx.var.limit_count_per_hour, ngx.var.limit_bytes_per_hour)
+protect("day", 3600 * 24, ngx.var.limit_count_per_day, ngx.var.limit_bytes_per_day)
