@@ -16,6 +16,7 @@ function garbage_clean(dict, during, ttl, timestamp)
                 dict:delete("count:"..during..":"..ip)
                 dict:delete("bytes:"..during..":"..ip)
                 dict:delete("costs:"..during..":"..ip)
+                dict:delete("forbidden:"..during..":"..ip)
                 ngx.log(ngx.INFO, "Garbage Clean", val)
             end
         end
@@ -38,7 +39,7 @@ function protect(during, ttl, count_limit, bytes_limit, costs_limit)
     local bytes_key = "bytes:"..during..":"..ip
     local costs_key = "costs:"..during..":"..ip
     local last_time_key = "last:"..during..":"..ip
-    local forbidden_key = "last:"..during..":"..ip
+    local forbidden_key = "forbidden:"..during..":"..ip
 
     garbage_clean(dict, during, ttl, timestamp)
     local last_time = dict:get(last_time_key)
