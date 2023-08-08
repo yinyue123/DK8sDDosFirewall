@@ -8,11 +8,10 @@ function stats(during)
     local bytes_key = "bytes:"..during..":"..ip
     local costs_key = "costs:"..during..":"..ip
     dict:incr(count_key, 1)
-    ngx.log(ngx.ERR, "add bytes", count_key, 1)
     dict:incr(bytes_key, request_length + bytes_sent)
-    ngx.log(ngx.ERR, "add bytes", bytes_key, request_length + bytes_sent)
     dict:incr(costs_key, math.floor(ngx.var.request_time * 1000))
-    ngx.log(ngx.ERR, "add costs", math.floor(ngx.var.request_time * 1000))
+    ngx.log(ngx.INFO, string.format('Usage %20s %5d %5d %5d',
+            ip, 1, request_length + bytes_sent, math.floor(ngx.var.request_time * 1000)))
 end
 
 stats("hour")
