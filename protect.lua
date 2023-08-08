@@ -14,6 +14,7 @@ function garbage_clean(dict, during, ttl, timestamp)
                 dict:delete(key)
                 dict:delete("count:"..during..":"..ip)
                 dict:delete("bytes:"..during..":"..ip)
+                dict:delete("costs:"..during..":"..ip)
                 ngx.log(ngx.ERR, "Garbage clean", key)
             end
         end
@@ -28,12 +29,13 @@ function set_key(dict, key, value)
     end
 end
 
-function protect(during, ttl, count_limit, bytes_limit)
+function protect(during, ttl, count_limit, bytes_limit, costs_limit)
     local dict = ngx.shared.traffic_stats
     local timestamp = ngx.now()
     local ip = ngx.var.limit_key
     local count_key = "count:"..during..":"..ip
     local bytes_key = "bytes:"..during..":"..ip
+    local costs_key = "costs:"..during..":"..ip
     local last_time_key = "last:"..during..":"..ip
 
     garbage_clean(dict, during, ttl, timestamp)
@@ -42,7 +44,8 @@ function protect(during, ttl, count_limit, bytes_limit)
         set_key(dict, last_time_key, timestamp)
         set_key(dict, count_key, 0)
         set_key(dict, bytes_key, 0)
-        ngx.log(ngx.ERR, "add ip", last_time_key, count_key, bytes_key)
+        set_key(dict, costs_key, 0)
+        ngx.log(ngx.ERR, "add ip", last_time_key, count_key, bytes_key, costs_key)
     end
 
     local count = dict:get(count_key)
@@ -57,7 +60,12 @@ function protect(during, ttl, count_limit, bytes_limit)
         ngx.exit(444)
     end
 
+    local cost = dict:get(costs_key)
+    ngx.log(ngx.ERR, "get costs", costs_key, cost)
+    if bytes ~= nil and bytes > tonumber(costs_limit) then
+        ngx.exit(444)
+    end
 end
 
-protect("hour", 3600, ngx.var.limit_count_per_hour, ngx.var.limit_bytes_per_hour)
-protect("day", 3600 * 24, ngx.var.limit_count_per_day, ngx.var.limit_bytes_per_day)
+protect("hour", 3600, ngx.var.limit_count_per_hour, ngx.var.limit_bytes_per_hour, ngx.var.limit_costs_per_hour)
+protect("day", 3600 * 24, ngx.var.limit_count_per_day, ngx.var.limit_bytes_per_day, ngx.var.limit_costs_per_hour)

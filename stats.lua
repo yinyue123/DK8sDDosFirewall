@@ -2,8 +2,7 @@
 function protect(during)
     local timestamp = ngx.now()
     local dict = ngx.shared.traffic_stats
-    local keys = dict:get_keys()
-    for key, value in keys:pairs() do
+    for key, value in pairs(dict:get_keys()) do
         ngx.log(ngx.ERR, key, value)
         ngx.say(key, ",", value)
         local match = "last:"..during
@@ -12,7 +11,8 @@ function protect(during)
             local last = value - timestamp
             local count = dict:get("count:"..during..":"..ip)
             local bytes = dict:get("bytes:"..during..":"..ip)
-            ngx.say(ip, ",", during, ",", last, ",", count, ",", bytes)
+            local costs = dict:get("costs:"..during..":"..ip)
+            ngx.say(ip, ",", during, ",", last, ",", count, ",", bytes, ",", costs)
         end
     end
 end
