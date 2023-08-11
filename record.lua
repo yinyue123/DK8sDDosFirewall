@@ -10,8 +10,8 @@ function stats(during)
     dict:incr(count_key, 1)
     dict:incr(bytes_key, request_length + bytes_sent)
     dict:incr(costs_key, math.floor(ngx.var.request_time * 1000))
-    ngx.log(ngx.INFO, string.format('Usage %20s %5d %5d %5d',
-            ip, 1, request_length + bytes_sent, math.floor(ngx.var.request_time * 1000)))
+    --ngx.log(ngx.INFO, string.format('Usage %20s %5d %5d %5d',
+    --        ip, 1, request_length + bytes_sent, math.floor(ngx.var.request_time * 1000)))
 end
 
 stats("hour")

@@ -1,8 +1,8 @@
 
-function protect(during)
+function stats(during)
     local timestamp = ngx.now()
     local dict = ngx.shared.traffic_stats
-    for _, val in pairs(dict:get_keys()) do
+    for _, val in pairs(dict:get_keys(0)) do
         local match = "last:"..during
         if string.sub(val, 1, #match) == match then
             local ip = string.sub(val, #match + 2, -1)
@@ -21,5 +21,5 @@ end
 
 ngx.say(string.format("%20s, %15s, %15s, %15s, %15s, %15s, %15s",
         'ip', 'during', 'age', 'count', 'bytes', 'costs', 'forbidden'))
-protect("hour")
-protect("day")
+stats("hour")
+stats("day")

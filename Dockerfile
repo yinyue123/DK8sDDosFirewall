@@ -1,12 +1,26 @@
-FROM --platform=linux/amd64 centos:7
-EXPOSE 80 443 3000
+FROM openresty/openresty:stretch as builder
 RUN mkdir /app
 WORKDIR /app
 
-RUN yum install -y yum-utils
-RUN yum-config-manager --add-repo https://openresty.org/package/centos/openresty.repo && yum install -y openresty openresty-resty openresty-opm
-RUN yum install -y vim
+ADD stats.lua    /app
+ADD protect.lua  /app
+ADD ping.lua     /app
+ADD record.lua   /app
 
+RUN /usr/local/openresty/luajit/bin/luajit -b /app/stats.lua   /app/stats.ljbc
+RUN /usr/local/openresty/luajit/bin/luajit -b /app/protect.lua /app/protect.ljbc
+RUN /usr/local/openresty/luajit/bin/luajit -b /app/ping.lua    /app/ping.ljbc
+RUN /usr/local/openresty/luajit/bin/luajit -b /app/record.lua  /app/record.ljbc
+
+FROM --platform=linux/amd64 openresty/openresty:stretch
+EXPOSE 80 443 3000
+
+RUN mkdir /app
+WORKDIR /app
+COPY --from=builder /app/stats.ljbc   /app/
+COPY --from=builder /app/protect.ljbc /app/
+COPY --from=builder /app/ping.ljbc    /app/
+COPY --from=builder /app/record.ljbc  /app/
 ADD stats.lua       /app/stats.lua
 ADD protect.lua     /app/protect.lua
 ADD ping.lua        /app/ping.lua
