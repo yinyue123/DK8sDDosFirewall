@@ -1,12 +1,17 @@
 
+function str_concat(...)
+    local str = {...}
+    return table.concat(str, ':')
+end
+
 function stats(during)
     local request_length = ngx.var.request_length
     local bytes_sent = ngx.var.bytes_sent
     local ip = ngx.var.limit_key
     local dict = ngx.shared.traffic_stats
-    local count_key = "count:"..during..":"..ip
-    local bytes_key = "bytes:"..during..":"..ip
-    local costs_key = "costs:"..during..":"..ip
+    local count_key = str_concat("count", during, ip)
+    local bytes_key = str_concat("bytes", during, ip)
+    local costs_key = str_concat("costs", during, ip)
     dict:incr(count_key, 1)
     dict:incr(bytes_key, request_length + bytes_sent)
     dict:incr(costs_key, math.floor(ngx.var.request_time * 1000))

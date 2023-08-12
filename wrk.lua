@@ -6,4 +6,6 @@ function request()
     return wrk.format("GET", path)
 end
 
--- wrk -s ./wrk.lua -c 500 -t 8 -d 600s http://[target]
+-- wrk -s ./wrk.lua -c 500 -t 8 -d 600s -c 10 http://[target]
+-- wrk -s ./wrk.lua -c 500 -t 8 -d 600s -c 150 http://[target]
+-- wrk -s ./wrk.lua -c 500 -t 8 -d 600s -c 100000 http://[target]
