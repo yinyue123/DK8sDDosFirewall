@@ -15,6 +15,8 @@ EXPOSE 80 443 3000
 
 RUN mkdir /app
 WORKDIR /app
+RUN apk add --no-cache tzdata
+ENV TZ Asia/Shanghai
 COPY --from=builder /app/stats.ljbc   /app/
 COPY --from=builder /app/protect.ljbc /app/
 COPY --from=builder /app/record.ljbc  /app/
