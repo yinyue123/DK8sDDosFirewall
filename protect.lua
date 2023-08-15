@@ -2,8 +2,7 @@ function set_key(dict, key, value)
     local ok, err = dict:set(key, value)
     if not ok then
         ngx.log(ngx.ERR, "Set key", key, "err", err)
-        -- ngx.exit(444)
-        ngx.exit(429)
+        ngx.exit(444)
     end
 end
 
@@ -34,22 +33,19 @@ function protect(during, ttl, count_limit, bytes_limit, costs_limit)
     local count = dict:get(count_key)
     if count ~= nil and count > tonumber(count_limit) then
         set_key(dict, forbidden_key, true)
-        -- ngx.exit(444)
-        ngx.exit(429)
+        ngx.exit(444)
     end
 
     local bytes = dict:get(bytes_key)
     if bytes ~= nil and bytes > tonumber(bytes_limit) then
         set_key(dict, forbidden_key, true)
-        -- ngx.exit(444)
-        ngx.exit(429)
+        ngx.exit(444)
     end
 
     local cost = dict:get(costs_key)
     if cost ~= nil and cost > tonumber(costs_limit) then
         set_key(dict, forbidden_key, true)
-        -- ngx.exit(444)
-        ngx.exit(429)
+        ngx.exit(444)
     end
 end
 
